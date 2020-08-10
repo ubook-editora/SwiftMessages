@@ -25,7 +25,10 @@ open class WindowViewController: UIViewController
         window.rootViewController = self
         window.windowLevel = windowLevel ?? UIWindow.Level.normal
         if #available(iOS 13, *) {
-            window.overrideUserInterfaceStyle = config.overrideUserInterfaceStyle
+            /// Doing this because there was a issue reported when trying to set the overrideUserInterfaceStyle directly by the normal API.
+            if window.responds(to: #selector(setter: UIView.overrideUserInterfaceStyle)) {
+                window.setValue(config.overrideUserInterfaceStyle.rawValue, forKeyPath: #keyPath(UIView.overrideUserInterfaceStyle))
+            }
         }
     }
     
